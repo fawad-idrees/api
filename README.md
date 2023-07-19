@@ -51,6 +51,8 @@ TO deploy from Visual studio you can click on explorer and click on "Publish to 
 - Give a Password to instane.
 
 
+- create a Yaml file to deploy the release on AWS to automate the Application.
+
 
 
 
