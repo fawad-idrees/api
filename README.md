@@ -58,7 +58,7 @@ TO deploy from Visual studio you can click on explorer and click on "Publish to 
 
 ## API Reference
 
-#### Get JWT TOKEN 
+#### Get JWT TOKEN items
 
 ```http
   GET /api/Login
@@ -72,6 +72,10 @@ TO deploy from Visual studio you can click on explorer and click on "Publish to 
 
 #### Login(User)
 Takes userName and password and returns token 
+
+
+
+
 
 #### Get Product
 
@@ -90,6 +94,9 @@ Takes Product Id and returns the details if it is available.
 
 
 
+
+
+
 ```http
   GET /api/Product
 ```
@@ -101,6 +108,9 @@ Takes Product Id and returns the details if it is available.
 #### GetProducts()
 
 Returns  All the Products.
+
+
+
 
 
 ```http
@@ -121,6 +131,9 @@ This will add the Product.
 
 
 
+
+
+
 ```http
   GET /api/Product
 ```
@@ -136,6 +149,9 @@ This will add the Product.
 #### UpDateProduct(product)
 
 This will Update the Product.
+
+
+
 
 
 
