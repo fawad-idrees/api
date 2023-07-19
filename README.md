@@ -58,7 +58,7 @@ TO deploy from Visual studio you can click on explorer and click on "Publish to 
 
 ## API Reference
 
-#### Get JWT TOKEN items
+#### Get JWT TOKEN 
 
 ```http
   GET /api/Login
