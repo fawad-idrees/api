@@ -20,11 +20,12 @@ namespace CRUD.Controllers
         private User AuthenciateUsers(User user) {
 
             User usr = null;
-           // if (user.UserName == "admin" && user.Password=="12345") {
+            if (user.UserName == "admin" && user.Password == "12345")
+            {
+
+                usr = new User() { UserName="administrator"};
             
-            usr=new User() { UserName="administrator"};
-            
-       //     }
+           }
             return usr;
 
         }
@@ -47,6 +48,8 @@ namespace CRUD.Controllers
         [HttpPost]
         public  IActionResult   Login(User user)
         {
+            try
+            {
 
             IActionResult respone = Unauthorized();
             var usr = AuthenciateUsers(user);
@@ -59,6 +62,12 @@ namespace CRUD.Controllers
             }
             return respone;
 
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
 
         }
 

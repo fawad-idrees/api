@@ -7,7 +7,7 @@ using System.Data;
 
 namespace CRUD.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -25,7 +25,7 @@ namespace CRUD.Controllers
 
             if (_context.Products==null)
             {
-                return NotFound();
+                return NotFound("Not Products Available to Display.");
 
             }
             return  await   _context.Products.ToListAsync();
@@ -37,7 +37,7 @@ namespace CRUD.Controllers
 
             if (_context.Products == null)
             {
-                return NotFound();
+                return NotFound("No Product available to Display against Prodcut ID {id}");
 
             }
             var product= await _context.Products.FindAsync(id);
@@ -48,25 +48,37 @@ namespace CRUD.Controllers
             return product;
 
         }
-        //[AllowAnonymous]
+       
         [HttpPost]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
+            try
+            {
 
-            _context.Products.Add(product);
-            await   _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetProductByID), new {id=product.ID},product);
+                if (ProductAvailable(product.ProdName))
+                {
+                    return NotFound("Product Already Available With Existing Name");
 
+                }
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetProductByID), new { id = product.ID }, product);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPut]
-        public async Task<ActionResult<Product>> UpDateProduct(int id,Product product)
+        public async Task<ActionResult<Product>> UpDateProduct(Product product)
         {
 
-            if (id !=product.ID)
+            if (!ProductAvailable(product.ID))
             {
-                return BadRequest();
-
+                return NotFound("Product not found against product ID={product.ID}");
             }
+          
             _context.Entry(product).State = EntityState.Modified;
 
             try
@@ -74,17 +86,9 @@ namespace CRUD.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (Exception ex )
             {
-                if (!ProductAvailable(id))
-                {
-                    return NotFound(ex);
-
-                }
-                else
-                {
-                    throw;
-                }
+                BadRequest("Update Failed with Message=" +ex.Message);
 
             }
             return Ok();
@@ -95,26 +99,41 @@ namespace CRUD.Controllers
 
             return (_context.Products?.Any(x => x.ID == id)).GetValueOrDefault() ;
         }
-
-
-        [HttpDelete("{id}") ]
-        public  async Task<IActionResult>DeleteProduct(int id)
+        private bool ProductAvailable(string Name)
         {
-            if     (_context.Products==null)
+
+            return (_context.Products?.Any(x => x.ProdName == Name)).GetValueOrDefault();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+
+            try
             {
-                return NotFound();
+
+            
+            if (_context.Products == null)
+            {
+                return NotFound("No Products are available to Delte");
 
             }
             var product = await _context.Products.FindAsync(id);
-            if (product==null)
+            if (product == null)
             {
-                return NotFound();
+                return NotFound("Product Id is not available.Enter Valid Product ID.");
 
             }
             _context.Products.Remove(product);
 
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok("Product Deleted Successfully.");
+             }
+            catch (Exception ex)
+            {
+
+                return BadRequest("Exception occured ="+ex.Message);
+            }
 
         }
     }
