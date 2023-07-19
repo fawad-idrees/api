@@ -7,7 +7,7 @@ using System.Data;
 
 namespace CRUD.Controllers
 {
-   // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
