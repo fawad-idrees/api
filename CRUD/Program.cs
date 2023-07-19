@@ -1,15 +1,21 @@
 using CRUD.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
-// Add services to the container.
+
+
+
+var dec= AESService.Decrypt(builder.Configuration.GetConnectionString("ProductCS"));
+
 builder.Services.AddDbContext<ProductContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ProductCS")
+options.UseSqlServer(
+    dec
 ));
 
 builder.Services.AddAuthentication(x =>

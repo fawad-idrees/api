@@ -37,7 +37,7 @@ namespace CRUD.Controllers
 
             if (_context.Products == null)
             {
-                return NotFound("No Product available to Display against Prodcut ID {id}");
+                return NotFound($"No Product available to Display against Prodcut ID {id}");
 
             }
             var product= await _context.Products.FindAsync(id);
@@ -60,7 +60,13 @@ namespace CRUD.Controllers
                     return NotFound("Product Already Available With Existing Name");
 
                 }
-                _context.Products.Add(product);
+               
+                _context.Products.Add(new Product
+                {
+                    ProdName = product.ProdName,
+                    CategoryName = product.CategoryName,
+                    Price = product.Price
+                });
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetProductByID), new { id = product.ID }, product);
             }
@@ -76,7 +82,7 @@ namespace CRUD.Controllers
 
             if (!ProductAvailable(product.ID))
             {
-                return NotFound("Product not found against product ID={product.ID}");
+                return NotFound($"Product not found against product ID={product.ID}");
             }
           
             _context.Entry(product).State = EntityState.Modified;
